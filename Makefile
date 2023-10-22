@@ -1,47 +1,26 @@
-#Makefile for mySDL
+# Makefile for compiling each C file individually in a "src" directory
 
-#CC = clang -g 
-CC = tcc
-#CC = gcc -ggdb
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 \
+	-Wunused-but-set-variable \
+	`sdl2-config --cflags --libs`\
+	-lGL -lSDL2_image
 
-LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm #-lsqlite3 #-lGL
+# Source files and their corresponding object files
+SRCDIR = src
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(SRCS:$(SRCDIR)/%.c=%.o)
 
-FLAGS = `sdl2-config --cflags --libs` -I/usr/local/include -L/usr/local/lib
+# The executable name
+EXECUTABLE = game
 
-FILES = src/main.c \
-	src/update.c \
-	src/resources.c \
-	src/render.c \
-	src/text.c \
-	src/input.c \
-	src/actors.c \
-	src/crafting.c \
-	src/gameoptions.c \
-	src/chargen.c \
-	src/scene.c \
-	src/maps.c \
-	src/sheet_character.c \
-	src/sheet_dialogue.c \
-	src/sheet_inventory.c \
-	src/renderports.c \
-#	src/data.c
+all: $(EXECUTABLE)
 
-#src/glfunctions.c
-#game.exe: src/SDL_collide.c src/actors.c src/datafunctions.c src/gameui.c
-# src/groups.c src/menus.c src/resources.c src/fonts.c src/maps.c 
-#src/movables.c src/render.c src/input.c src/world.c src/Main.c
-#	gcc -o mySDL.exe -L /usr/local/lib -I /usr/local/include/SDL -lm -lSDL -lSDL_image *.c
-#	gcc -o game.exe src/*.c `sdl-config --cflags --libs` -lSDL_image -lm
+$(EXECUTABLE): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
 
-all:
-	$(CC) -o game $(FILES) $(FLAGS) $(LIBS)
+%.o: $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	@echo Cleaning up...
-	@echo Erasing exec
-	@rm game
-	@echo Erasing emacs backups
-	@rm src/*.*~
-	@rm src/*.o
-	@rm *.core
-	@echo Done.
+	rm -f $(OBJS) $(EXECUTABLE)

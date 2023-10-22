@@ -35,7 +35,7 @@ int start_sdl(GameCore *gc)
   //gc->screen_size_x = 1024; //1360; //640; // (why hardcode again?)
   //gc->screen_size_y = 768; //480; //v---- run SDL_Init()  
   if (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS
-		| SDL_WINDOW_FULLSCREEN_DESKTOP) == -1){
+		) == -1) {
 		//      | SDL_WINDOW_FULLSCREEN_DESKTOP) == -1) {
     printf("SDL_Init: %s \n", SDL_GetError() );
     return 1;
@@ -48,8 +48,8 @@ int start_sdl(GameCore *gc)
   SDL_RendererInfo displayRendererInfo; //new
   SDL_CreateWindowAndRenderer(gc->screen_size_x,
 			      gc->screen_size_y,
-			      //SDL_WINDOW_OPENGL,
-			      SDL_WINDOW_FULLSCREEN_DESKTOP,
+			      SDL_WINDOW_OPENGL,
+			      //SDL_WINDOW_FULLSCREEN_DESKTOP,
 			      &gc->win,
 			      &gc->renderer );
   SDL_GetRendererInfo(gc->renderer, &displayRendererInfo);

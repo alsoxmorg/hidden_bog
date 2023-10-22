@@ -15,7 +15,8 @@ void fast_button(GameCore *gc, int x, int y, char *text);//render.c
 SDL_Rect fast_rect(int x, int y, int w, int h);//render.c
 void set_rect(SDL_Rect *r, int x, int y, int w, int h);
 
-void rendertext(GameCore *gc, char *message);
+//void rendertext(GameCore *gc, char *message);
+void rendertext(SDL_Renderer *r, SDL_Texture *t, int x, int y, char *message);
 void sdl_set_textpos(GameCore *gc, int x, int y); //text.c
 void set_color(GameCore *gc, int r, int g, int b); //set_font_color;
 void fast_radio(GameCore *gc, int x, int y, char *text, int selected); //does not uncheck? //render.c
@@ -57,8 +58,8 @@ void draw_char_menu_frame(GameCore *gc)
 void draw_gender_radio(GameCore *gc)
 {
   printf("debug: draw_gender_radio\n");
-  //set_rect(&gc->radio_raised, 18,14,24,24);
-  //set_rect(&gc->radio_pressed,18,50,24,24);
+  set_rect(&gc->radio_raised, 18,14,24,24);
+  set_rect(&gc->radio_pressed,18,50,24,24);
 
   SDL_Rect r;
   r = fast_rect(gc->player->portrait*128,0,128,128);
@@ -71,11 +72,11 @@ void draw_gender_radio(GameCore *gc)
     printf("debug: fast_radia Female\n"); fast_radio(gc, 200,130, "Female", 0);
   }
   if(gc->player->sex == 0) {  //check sex for portraits
-  SDL_RenderCopy(gc->renderer, gc->portraits_human_male,&r, &gc->char_frame_rect); //TODO: get female portraits
-  //check race, there are a total of 10 png's 
+    //SDL_RenderCopy(gc->renderer, gc->portraits_human_male,&r, &gc->char_frame_rect); //TODO: get female portraits
+    //check race, there are a total of 10 png's 
   }
   else { //1
-    SDL_RenderCopy(gc->renderer, gc->portraits_human_male,&r, &gc->char_frame_rect); //male portraits
+    //SDL_RenderCopy(gc->renderer, gc->portraits_human_male,&r, &gc->char_frame_rect); //male portraits
     //check race, there are a total of 10 png's 
   }
   printf("debug:(done) draw_gender_radio\n");
@@ -89,12 +90,10 @@ void draw_chargen_menu(GameCore *gc)
   dst = fast_rect(8,65,180,450);
   draw_char_menu_frame(gc); //draw background (with buttons)
   SDL_RenderCopy(gc->renderer, gc->character_doll, &gc->character_doll_rect, &dst); //put background
-  sdl_set_textpos(gc, 210, 80); set_color(gc, 255, 255, 255);
-  rendertext(gc, "Gender"); //draw text for gender radios
+  //sdl_set_textpos(gc, 210, 80); set_color(gc, 255, 255, 255);
+  rendertext(gc->renderer, gc->font0, 210, 90, "Gender");
   draw_gender_radio(gc); //draw the male-female radio buttons.
-  sdl_set_textpos(gc, 210, 180); //set_color(gc, 255, 255, 255);
-  //SDL_RenderCopy(gc->renderer, sdl_printf_font(gc, "Race"), NULL, gc->c_text_size);
-  rendertext(gc, "Race");  //draw text for the race picker.
+  rendertext(gc->renderer, gc->font0, 210, 180, "Race");
   
   if(gc->player->race == 0) {  fast_radio(gc, 200, 200, "Human",1); }//0
   else { fast_radio(gc, 200, 200, "Human",0); }
@@ -137,15 +136,14 @@ void draw_character_1attribute(GameCore *gc, int x, int y, int stat, char *str)
 {
   printf("debug: draw_character_1attribute\n");
   char stat_text[4];
-  sdl_set_textpos(gc, x, y);
-  rendertext(gc, str);
+  rendertext(gc->renderer, gc->font0, x, y, str);
   sdl_set_textpos(gc,x+180,y);
   sprintf(stat_text, "%2d", stat);
-  rendertext(gc, stat_text);
+  rendertext(gc->renderer, gc->font0, x+180, y, stat_text);
 }
 void draw_minusplus_buttons(GameCore *gc, int x, int y)
 {
-  printf("debug: draw_minusplus_buttons\n");
+  /*printf("debug: draw_minusplus_buttons\n");*/
   SDL_Rect dst, dst2;
   dst = fast_rect(x-32+20, y, 20, 20);
   dst2 = fast_rect(x-32, y, 20, 20);
@@ -155,8 +153,8 @@ void draw_minusplus_buttons(GameCore *gc, int x, int y)
 }
 void draw_character_attributes(GameCore *gc, int x, int y, int moddable)
 {
-  printf("debug: draw_character_attributes\n");
-  //char stat_text[4];
+  /*printf("debug: draw_character_attributes\n");
+  char stat_text[4];*/
   SDL_Rect stat_bg_frame, stat_fg_frame;
   stat_bg_frame.w = 200;  stat_bg_frame.h = 170; stat_bg_frame.x = x-35;
   stat_bg_frame.y = y-5;
@@ -207,10 +205,10 @@ void handle_mousebutton_down_chargen_menu(GameCore *gc)
   SDL_Rect mstrength, pstrength, mintell, pintell, magi, pagi; //plus and minus buttons
   SDL_Rect mwisdom, pwisdom, mstamina, pstamina, mcharisma, pcharisma, mluck, pluck;
   SDL_Rect mportrait, pportrait;
-  SDL_Rect rmale, rfemale; //radio buttons for male/female
+  SDL_Rect rmale, rfemale; /*radio buttons for male/female*/
   SDL_Rect race_rect;
-  //fast_radio(gc, 200, 100, "Male");
-  //fast_radio(gc, 200, 130, "Female");
+  /*fast_radio(gc, 200, 100, "Male");
+    fast_radio(gc, 200, 130, "Female");*/
 
   rmale = fast_rect(200, 100, 28,28);
   rfemale = fast_rect(200,130,28,28);
