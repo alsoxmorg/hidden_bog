@@ -71,19 +71,20 @@ void draw_playport_south(GameCore *gc)
 {  //int current_tile; //set value to whatever tile we are rendering.
   int ms = gc->mapsize;
   int mapy = gc->player->map_y;
-  //if(mapy +2 > ms)
+  //check if gc->player->map_y+2 exists
+  if(mapy+2 < ms) {
   draw_fov2(gc, gc->current_map->background_layer[gc->player->map_y+2][gc->player->map_x+1],
 	      gc->current_map->background_layer[gc->player->map_y+2][gc->player->map_x],
 	      gc->current_map->background_layer[gc->player->map_y+2][gc->player->map_x-1]);
-  
+  }
+  if(mapy+1 < ms) {
   draw_fov1(gc, gc->current_map->background_layer[gc->player->map_y+1][gc->player->map_x+1],
 	    gc->current_map->background_layer[gc->player->map_y+1][gc->player->map_x],
 	    gc->current_map->background_layer[gc->player->map_y+1][gc->player->map_x-1]);
   draw_oov1(gc,gc->current_map->object_layer[gc->player->map_y+1][gc->player->map_x+1],
 	    gc->current_map->object_layer[gc->player->map_y+1][gc->player->map_x],
 	    gc->current_map->object_layer[gc->player->map_y+1][gc->player->map_x-1]);
-
-
+  }
   draw_fov0(gc, gc->current_map->background_layer[gc->player->map_y][gc->player->map_x+1],    
 	    gc->current_map->background_layer[gc->player->map_y][gc->player->map_x],
 	    gc->current_map->background_layer[gc->player->map_y][gc->player->map_x-1]);
