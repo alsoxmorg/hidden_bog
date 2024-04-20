@@ -4,7 +4,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 \
 	-Wunused-but-set-variable \
 	`sdl2-config --cflags --libs`\
-	-lGL -lSDL2_image
+	-lSDL2_image 
 
 # Source files and their corresponding object files
 SRCDIR = src
